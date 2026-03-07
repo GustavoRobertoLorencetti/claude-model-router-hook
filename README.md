@@ -41,7 +41,8 @@ Two hook scripts run inside Claude Code:
 ### Plugin install (recommended)
 
 ```bash
-claude plugin install claude-model-router-hook
+claude plugin marketplace add tzachbon/claude-model-router-hook
+claude plugin install claude-model-router-hook@claude-model-router-hook
 ```
 
 Hooks are registered automatically. Restart Claude Code to activate.
