@@ -1,5 +1,5 @@
 #!/bin/bash
-# Model Advisor Hook (UserPromptSubmit)
+# Model Router Hook (UserPromptSubmit)
 # Auto-switches settings.json to the recommended model tier and blocks with
 # a minimal "↑ Enter to resend" message. On settings write failure, falls
 # back to a non-blocking advisory.
@@ -27,7 +27,7 @@ prompt = data.get("prompt", "")
 # Override: prefix with "~" bypasses all checks
 if prompt.lstrip().startswith("~"):
     try:
-        log_path = os.path.expanduser("~/.claude/hooks/model-advisor.log")
+        log_path = os.path.expanduser("~/.claude/hooks/model-router-hook.log")
         snippet = prompt[:30].replace("\n", " ") + ("..." if len(prompt) > 30 else "")
         ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         with open(log_path, "a") as f:
@@ -110,7 +110,7 @@ elif recommendation == "opus" and (is_sonnet or is_haiku):
 
 # --- Log ---
 try:
-    log_path = os.path.expanduser("~/.claude/hooks/model-advisor.log")
+    log_path = os.path.expanduser("~/.claude/hooks/model-router-hook.log")
     snippet = prompt[:30].replace("\n", " ") + ("..." if len(prompt) > 30 else "")
     rec = recommendation or "match"
     action = f"AUTOSWITCH->{new_model}" if block else "ALLOW"

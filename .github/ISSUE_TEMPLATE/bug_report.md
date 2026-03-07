@@ -18,7 +18,7 @@ Steps to reproduce:
 What you expected to happen.
 
 **Log output**
-Paste the relevant lines from `~/.claude/hooks/model-advisor.log`.
+Paste the relevant lines from `~/.claude/hooks/model-router-hook.log`.
 
 **Environment**
 - OS: (e.g. macOS 14, Ubuntu 24.04, WSL2)

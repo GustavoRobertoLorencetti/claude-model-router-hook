@@ -57,13 +57,13 @@ exit 0
 
 ---
 
-## Step 3 — Create `~/.claude/hooks/model-advisor.sh`
+## Step 3 — Create `~/.claude/hooks/model-router-hook.sh`
 
-Write the content below, then run `chmod +x ~/.claude/hooks/model-advisor.sh`.
+Write the content below, then run `chmod +x ~/.claude/hooks/model-router-hook.sh`.
 
 ```bash
 #!/bin/bash
-# Model Advisor Hook (UserPromptSubmit)
+# Model Router Hook (UserPromptSubmit)
 # Auto-switches settings.json to the recommended model tier and injects a
 # systemMessage into the chat announcing the switch.
 #
@@ -89,7 +89,7 @@ prompt = data.get("prompt", "")
 # Override: prefix with "~" bypasses all checks
 if prompt.lstrip().startswith("~"):
     try:
-        log_path = os.path.expanduser("~/.claude/hooks/model-advisor.log")
+        log_path = os.path.expanduser("~/.claude/hooks/model-router-hook.log")
         snippet = prompt[:30].replace("\n", " ") + ("..." if len(prompt) > 30 else "")
         ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         with open(log_path, "a") as f:
@@ -168,7 +168,7 @@ elif recommendation == "opus" and (is_sonnet or is_haiku):
 
 # --- Log ---
 try:
-    log_path = os.path.expanduser("~/.claude/hooks/model-advisor.log")
+    log_path = os.path.expanduser("~/.claude/hooks/model-router-hook.log")
     snippet = prompt[:30].replace("\n", " ") + ("..." if len(prompt) > 30 else "")
     rec = recommendation or "match"
     action = f"AUTOSWITCH->{new_model}" if new_model else "ALLOW"
@@ -184,9 +184,9 @@ if new_model:
         settings["model"] = new_model
         with open(settings_path, "w") as f:
             json.dump(settings, f, indent=2)
-        msg = f"[model-advisor] Switched {model} -> {new_model}  (prefix ~ to bypass)"
+        msg = f"[model-router-hook] Switched {model} -> {new_model}  (prefix ~ to bypass)"
     except Exception:
-        msg = f"[model-advisor] Recommended {new_model} for this task but could not auto-switch. Run /model {new_model.split(\"[\")[0]}"
+        msg = f"[model-router-hook] Recommended {new_model} for this task but could not auto-switch. Run /model {new_model.split(\"[\")[0]}"
     print(json.dumps({"systemMessage": msg}))
 '
 
@@ -218,7 +218,7 @@ Add a new `UserPromptSubmit` section:
     "hooks": [
       {
         "type": "command",
-        "command": "~/.claude/hooks/model-advisor.sh",
+        "command": "~/.claude/hooks/model-router-hook.sh",
         "timeout": 2
       }
     ]
@@ -240,11 +240,11 @@ Restart to activate the hooks.
 ## How It Works
 
 - Every prompt is classified by task complexity (keyword + pattern matching, no API calls).
-- If your active model doesn't match the task tier, it auto-switches `settings.json` and injects a `systemMessage` into the chat: `[model-advisor] Switched sonnet -> opus`.
+- If your active model doesn't match the task tier, it auto-switches `settings.json` and injects a `systemMessage` into the chat: `[model-router-hook] Switched sonnet -> opus`.
 - The switch is visible in the chat on every affected message. No need to re-send.
 - Prefix any prompt with `~` to bypass the advisor entirely.
 - Every session gets context injecting mandatory sub-agent model rules:
   - `haiku` - file lookups, `grep`, `glob`, `git status`, quick reads
   - `sonnet` - writing/editing code, debugging, general agents
   - `opus` - architecture, deep multi-file analysis, plan-mode agents
-- Classifications are logged to `~/.claude/hooks/model-advisor.log`.
+- Classifications are logged to `~/.claude/hooks/model-router-hook.log`.

@@ -3,8 +3,8 @@
 ## Dev setup
 
 ```bash
-git clone https://github.com/tzachbon/claude-model-advisor.git
-cd claude-model-advisor
+git clone https://github.com/tzachbon/claude-model-router-hook.git
+cd claude-model-router-hook
 ```
 
 No build step. The hooks are plain bash scripts.
@@ -13,7 +13,7 @@ No build step. The hooks are plain bash scripts.
 
 - Edit scripts in `hooks/`
 - Test locally by installing with `./install.sh` and running Claude Code
-- Check the log at `~/.claude/hooks/model-advisor.log`
+- Check the log at `~/.claude/hooks/model-router-hook.log`
 
 ## Commit style
 
@@ -36,4 +36,4 @@ Keep messages short and in lowercase imperative mood.
 
 ## Reporting bugs
 
-Use the bug report issue template. Include your shell, OS, and a snippet from `model-advisor.log`.
+Use the bug report issue template. Include your shell, OS, and a snippet from `model-router-hook.log`.

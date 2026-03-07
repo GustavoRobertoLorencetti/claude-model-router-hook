@@ -1,6 +1,6 @@
 <div align="center">
 
-# Claude Model Advisor
+# Claude Model Router Hook
 
 **Automatic model switching for Claude Code. No API calls, no config.**
 
@@ -8,7 +8,7 @@
 ![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Linux-lightgrey)
 ![Shell](https://img.shields.io/badge/shell-bash-blue)
 
-<img src="assets/preview.png" width="400" alt="Claude Model Advisor preview" />
+<img src="assets/preview.png" width="400" alt="Claude Model Router Hook preview" />
 
 </div>
 
@@ -20,7 +20,7 @@ A Claude Code hook system that classifies every prompt by task complexity and sw
 - Auto-switches `settings.json` and injects a chat message on every tier mismatch
 - Injects sub-agent model-selection rules into every session via `SessionStart`
 - Prefix any prompt with `~` to bypass classification and keep the current model
-- Logs every classification and switch to `~/.claude/hooks/model-advisor.log`
+- Logs every classification and switch to `~/.claude/hooks/model-router-hook.log`
 
 ## How It Works
 
@@ -34,14 +34,14 @@ Two hook scripts run inside Claude Code:
 | `sonnet` | Feature work, debugging, writing/editing code, planning |
 | `opus` | Architecture, deep multi-file analysis, complex refactors |
 
-**`model-advisor.sh`** (`UserPromptSubmit`) classifies the incoming prompt, compares the recommended tier against the current model in `settings.json`, and switches if they do not match. The switch is reflected immediately in the current message.
+**`model-router-hook.sh`** (`UserPromptSubmit`) classifies the incoming prompt, compares the recommended tier against the current model in `settings.json`, and switches if they do not match. The switch is reflected immediately in the current message.
 
 ## Installation
 
 ### One-liner
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/tzachbon/claude-model-advisor/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/tzachbon/claude-model-router-hook/main/install.sh | bash
 ```
 
 Then follow the printed instructions to update `~/.claude/settings.json`.
@@ -49,8 +49,8 @@ Then follow the printed instructions to update `~/.claude/settings.json`.
 ### Manual
 
 ```bash
-git clone https://github.com/tzachbon/claude-model-advisor.git
-cd claude-model-advisor
+git clone https://github.com/tzachbon/claude-model-router-hook.git
+cd claude-model-router-hook
 ./install.sh
 ```
 
@@ -58,8 +58,8 @@ Or copy manually:
 
 ```bash
 mkdir -p ~/.claude/hooks
-cp hooks/session-init.sh hooks/model-advisor.sh ~/.claude/hooks/
-chmod +x ~/.claude/hooks/session-init.sh ~/.claude/hooks/model-advisor.sh
+cp hooks/session-init.sh hooks/model-router-hook.sh ~/.claude/hooks/
+chmod +x ~/.claude/hooks/session-init.sh ~/.claude/hooks/model-router-hook.sh
 ```
 
 ### Update `~/.claude/settings.json`
@@ -85,7 +85,7 @@ Under `UserPromptSubmit`:
     "hooks": [
       {
         "type": "command",
-        "command": "/home/yourname/.claude/hooks/model-advisor.sh",
+        "command": "/home/yourname/.claude/hooks/model-router-hook.sh",
         "timeout": 2
       }
     ]
@@ -105,7 +105,7 @@ Settings are read from `~/.claude/settings.json`. The advisor writes the `model`
 
 ## Log
 
-Activity is written to `~/.claude/hooks/model-advisor.log`:
+Activity is written to `~/.claude/hooks/model-router-hook.log`:
 
 ```
 [2026-03-07 12:00:00] model=sonnet rec=opus action=AUTOSWITCH->opus prompt="analyze the entire..."
@@ -175,13 +175,13 @@ exit 0
 
 
 ────────────────────────────────────────────────────────────
-STEP 3 — Create ~/.claude/hooks/model-advisor.sh
+STEP 3 — Create ~/.claude/hooks/model-router-hook.sh
 ────────────────────────────────────────────────────────────
 
-Write this exact content to the file, then run: chmod +x ~/.claude/hooks/model-advisor.sh
+Write this exact content to the file, then run: chmod +x ~/.claude/hooks/model-router-hook.sh
 
 #!/bin/bash
-# Model Advisor Hook (UserPromptSubmit)
+# Model Router Hook (UserPromptSubmit)
 # Auto-switches settings.json to the recommended model tier and blocks with
 # a minimal "↑ Enter to resend" message. On settings write failure, falls
 # back to a non-blocking advisory.
@@ -209,7 +209,7 @@ prompt = data.get("prompt", "")
 # Override: prefix with "~" bypasses all checks
 if prompt.lstrip().startswith("~"):
     try:
-        log_path = os.path.expanduser("~/.claude/hooks/model-advisor.log")
+        log_path = os.path.expanduser("~/.claude/hooks/model-router-hook.log")
         snippet = prompt[:30].replace("\n", " ") + ("..." if len(prompt) > 30 else "")
         ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         with open(log_path, "a") as f:
@@ -292,7 +292,7 @@ elif recommendation == "opus" and (is_sonnet or is_haiku):
 
 # --- Log ---
 try:
-    log_path = os.path.expanduser("~/.claude/hooks/model-advisor.log")
+    log_path = os.path.expanduser("~/.claude/hooks/model-router-hook.log")
     snippet = prompt[:30].replace("\n", " ") + ("..." if len(prompt) > 30 else "")
     rec = recommendation or "match"
     action = f"AUTOSWITCH->{new_model}" if block else "ALLOW"
@@ -353,7 +353,7 @@ Add a new top-level "UserPromptSubmit" section:
       "hooks": [
         {
           "type": "command",
-          "command": "~/.claude/hooks/model-advisor.sh",
+          "command": "~/.claude/hooks/model-router-hook.sh",
           "timeout": 2
         }
       ]
