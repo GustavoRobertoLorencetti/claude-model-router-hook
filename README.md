@@ -373,6 +373,10 @@ Restart to activate the hooks.
 
 </details>
 
+## Credits
+
+Based on [model-matchmaker](https://github.com/coyvalyss1/model-matchmaker) by [@coyvalyss1](https://github.com/coyvalyss1).
+
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md).
