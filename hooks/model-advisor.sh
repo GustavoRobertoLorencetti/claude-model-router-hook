@@ -122,7 +122,8 @@ if new_model:
             json.dump(settings, f, indent=2)
         msg = f"[model-advisor] Switched {model} -> {new_model}  (prefix ~ to bypass)"
     except Exception:
-        msg = f"[model-advisor] Recommended {new_model} for this task but could not auto-switch. Run /model {new_model.split(\"[\")[0]}"
+        model_base = new_model.split("[")[0]
+        msg = f"[model-advisor] Recommended {new_model} for this task but could not auto-switch. Run /model {model_base}"
     print(json.dumps({"systemMessage": msg}))
 '
 
