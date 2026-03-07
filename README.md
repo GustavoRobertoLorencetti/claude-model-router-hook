@@ -1,40 +1,66 @@
 # claude-model-advisor
 
-A Claude Code hook system that automatically switches your active model based on task complexity and injects sub-agent model-selection rules into every session.
+**Automatic model switching for Claude Code — no API calls, no config.**
 
-## How It Works
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Linux-lightgrey)
+![Shell](https://img.shields.io/badge/shell-bash-blue)
 
-- Every prompt is classified by task complexity using keyword and pattern matching (no API calls).
-- If your active model does not match the task tier, it auto-switches `settings.json` and injects a `systemMessage` into the chat: `[model-advisor] Switched sonnet -> opus`.
-- The switch is visible in the chat on every affected message. No need to re-send.
-- Prefix any prompt with `~` to bypass the advisor entirely.
-- Every session receives context with mandatory sub-agent model rules:
-  - `haiku` - file lookups, `grep`, `glob`, `git status`, quick reads
-  - `sonnet` - writing/editing code, debugging, general agents
-  - `opus` - architecture, deep multi-file analysis, plan-mode agents
-- All classifications are logged to `~/.claude/hooks/model-advisor.log`.
+A Claude Code hook system that classifies every prompt by task complexity and switches your active model automatically. Sub-agent model rules are injected into every session so spawned agents also use the right tier.
+
+## Features
+
+- Classifies prompts by complexity using keyword and pattern matching (zero API calls)
+- Auto-switches `settings.json` and injects a chat message on every tier mismatch
+- Injects sub-agent model-selection rules into every session via `SessionStart`
+- Prefix any prompt with `~` to bypass classification and keep the current model
+- Logs every classification and switch to `~/.claude/hooks/model-advisor.log`
+
+## How it works
+
+Two hook scripts run inside Claude Code:
+
+**`session-init.sh`** (`SessionStart`) — injects a `systemMessage` into every session that enforces these sub-agent rules:
+
+| Tier | Use for |
+|------|---------|
+| `haiku` | Git ops, renames, formatting, file lookups, quick reads |
+| `sonnet` | Feature work, debugging, writing/editing code, planning |
+| `opus` | Architecture, deep multi-file analysis, complex refactors |
+
+**`model-advisor.sh`** (`UserPromptSubmit`) — classifies the incoming prompt, compares the recommended tier against the current model in `settings.json`, and switches if they do not match. The switch is reflected immediately in the current message.
 
 ## Installation
 
-### Step 1 — Create the hooks directory
+### One-liner
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/tzachbon/claude-model-advisor/main/install.sh | bash
+```
+
+Then follow the printed instructions to update `~/.claude/settings.json`.
+
+### Manual
+
+```bash
+git clone https://github.com/tzachbon/claude-model-advisor.git
+cd claude-model-advisor
+./install.sh
+```
+
+Or copy manually:
 
 ```bash
 mkdir -p ~/.claude/hooks
-```
-
-### Step 2 — Copy the hook scripts
-
-```bash
-cp hooks/session-init.sh ~/.claude/hooks/session-init.sh
-cp hooks/model-advisor.sh ~/.claude/hooks/model-advisor.sh
+cp hooks/session-init.sh hooks/model-advisor.sh ~/.claude/hooks/
 chmod +x ~/.claude/hooks/session-init.sh ~/.claude/hooks/model-advisor.sh
 ```
 
-### Step 3 — Update `~/.claude/settings.json`
+### Update `~/.claude/settings.json`
 
-Add these entries to the `hooks` object. Preserve any existing hooks.
+Add to the `hooks` object (use the full absolute path from `echo $HOME`):
 
-Under `SessionStart`, add alongside any existing entries:
+Under `SessionStart`:
 
 ```json
 {
@@ -44,7 +70,7 @@ Under `SessionStart`, add alongside any existing entries:
 }
 ```
 
-Add a new `UserPromptSubmit` section:
+Under `UserPromptSubmit`:
 
 ```json
 "UserPromptSubmit": [
@@ -61,30 +87,30 @@ Add a new `UserPromptSubmit` section:
 ]
 ```
 
-Use the full absolute path for `command`. Find your home path with: `echo $HOME`
-
-### Step 4 — Restart Claude Code
-
-Restart to activate the hooks.
-
-## Model Tiers
-
-| Tier | Use for |
-|------|---------|
-| `haiku` | Git ops, renames, formatting, file lookups, quick reads |
-| `sonnet` | Feature work, debugging, writing/editing code, planning |
-| `opus` | Architecture, deep multi-file analysis, complex refactors |
+Then restart Claude Code.
 
 ## Override
 
-Prefix any prompt with `~` to skip classification and keep the current model.
+Prefix any prompt with `~` to skip classification entirely and keep the current model active.
+
+## Configuration
+
+Settings are read from `~/.claude/settings.json`. The advisor writes the `model` field under `env` when switching tiers. No other files are modified.
 
 ## Log
 
-Activity is logged to `~/.claude/hooks/model-advisor.log`:
+Activity is written to `~/.claude/hooks/model-advisor.log`:
 
 ```
 [2026-03-07 12:00:00] model=sonnet rec=opus action=AUTOSWITCH->opus prompt="analyze the entire..."
 [2026-03-07 12:01:00] model=opus rec=match action=ALLOW prompt="git commit changes"
 [2026-03-07 12:02:00] OVERRIDE prompt="~ keep opus for this..."
 ```
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## License
+
+MIT — see [LICENSE](LICENSE).
