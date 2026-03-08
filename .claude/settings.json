@@ -1,6 +1,7 @@
 {
   "enabledPlugins": {
-    "ralph-specum@smart-ralph": true
+    "ralph-specum@smart-ralph": true,
+    "plugin-dev@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "smart-ralph": {
