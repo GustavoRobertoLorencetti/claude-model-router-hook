@@ -1,5 +1,13 @@
 {
   "enabledPlugins": {
     "ralph-specum@smart-ralph": true
+  },
+  "extraKnownMarketplaces": {
+    "smart-ralph": {
+      "source": {
+        "source": "github",
+        "repo": "tzachbon/smart-ralph"
+      }
+    }
   }
 }
