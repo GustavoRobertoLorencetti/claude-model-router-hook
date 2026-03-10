@@ -8,7 +8,7 @@
 ![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Linux-lightgrey)
 ![Shell](https://img.shields.io/badge/shell-bash-blue)
 
-<img width="887" height="310" alt="image" src="https://github.com/user-attachments/assets/46ee9272-53d4-48f5-90b5-4456e8a4fd2b" />
+<video src="docs/slides/public/model-router.mov" width="887" controls></video>
 
 </div>
 
