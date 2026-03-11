@@ -34,6 +34,8 @@ Two hook scripts run inside Claude Code:
 | `sonnet` | Feature work, debugging, writing/editing code, planning |
 | `opus` | Architecture, deep multi-file analysis, complex refactors |
 
+![Sub-agent spawned with Sonnet 4.6 model](assets/sub-agent-routing.png)
+
 **`model-router-hook.sh`** (`UserPromptSubmit`) classifies the incoming prompt, compares the recommended tier against the current model in `settings.json`, and switches if they do not match. The switch is reflected immediately in the current message.
 
 ## Installation

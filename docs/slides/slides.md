@@ -105,12 +105,13 @@ layout: center
 
 <h2 class="text-2xl font-bold text-amber-400 mb-4 text-center">Demo</h2>
 
-<div class="flex justify-center">
-<video src="/model-router.mov" controls class="rounded-xl border border-white/10 shadow-2xl" style="max-height: 55vh; max-width: 80%;" />
+<div class="flex flex-row gap-6 items-center justify-center">
+<img src="/sub-agent-routing.png" class="rounded-xl border border-white/10 shadow-2xl" style="max-height: 52vh; max-width: 45%;" />
+<video src="/model-router.mov" controls class="rounded-xl border border-white/10 shadow-2xl" style="max-height: 52vh; max-width: 45%;" />
 </div>
 
 <!--
-Here's the router in action. Watch how it detects the task type from the prompt and suggests the right model tier automatically. No configuration needed — it just works out of the box.
+On the left: sub-agents spawned with the correct model tier, injected by the SessionStart hook. On the right: the prompt router switching models in real time. No API calls, no config — just pattern matching.
 -->
 
 ---
